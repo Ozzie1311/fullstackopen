@@ -1,3 +1,7 @@
+import Header from './Header.jsx'
+import Votes from './Votes.jsx'
+import Button from './Button.jsx'
+import MostVoted from './MostVoted.jsx'
 import { useState } from 'react'
 
 const App = () => {
@@ -15,6 +19,10 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
+  const totalVotes = Math.max(...votes)
+  const findAnecdote = votes.indexOf(totalVotes)
+  const winnerAnecdote = anecdotes[findAnecdote]
+
   const handleVotes = () => {
     const stateCopy = [...votes]
     stateCopy[selected] += 1
@@ -28,10 +36,11 @@ const App = () => {
 
   return (
     <div>
-      <h1>{anecdotes[selected]}</h1>
-      {votes[selected] !== 0 && <p>has {votes[selected]} votes</p>}
-      <button onClick={handleVotes}>Vote</button>
-      <button onClick={generateRandomAnecdote}>Generate</button>
+      <Header anecdotes={anecdotes} selected={selected} />
+      <Votes votes={votes} selected={selected} />
+      <Button text='Vote' handleClick={handleVotes} />
+      <Button text='Generate' handleClick={generateRandomAnecdote} />
+      <MostVoted totalVotes={totalVotes} winnerAnecdote={winnerAnecdote} />
     </div>
   )
 }
