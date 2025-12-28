@@ -1,5 +1,7 @@
 const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad
+  const average = total === 0 ? 0 : (good - bad) / total
+  const positivePercentage = total === 0 ? 0 : (good / total) * 100
   return (
     <>
       <h2>Statistics</h2>
@@ -7,8 +9,8 @@ const Statistics = ({ good, neutral, bad }) => {
       <p>neutral: {neutral}</p>
       <p>bad: {bad}</p>
       <p>all {total} </p>
-      <p>average {good ? (good - bad) / total : 0}</p>
-      <p>positive {good ? `${(good / total) * 100}%` : 0}</p>
+      <p>average {average} </p>
+      <p>positive {positivePercentage}%</p>
     </>
   )
 }
