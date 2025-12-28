@@ -11,12 +11,19 @@ const Statistics = ({ good, neutral, bad }) => {
         <p>No feedback given</p>
       ) : (
         <>
-          <StatisticsLine text='good' value={good} />
-          <StatisticsLine text='neutral' value={neutral} />
-          <StatisticsLine text='bad' value={bad} />
-          <StatisticsLine text='total' value={total} />
-          <StatisticsLine text='average' value={average} />
-          <StatisticsLine text='positive' value={`${positivePercentage}%`} />
+          <table>
+            <tbody>
+              <StatisticsLine text='good' value={good} />
+              <StatisticsLine text='neutral' value={neutral} />
+              <StatisticsLine text='bad' value={bad} />
+              <StatisticsLine text='total' value={total} />
+              <StatisticsLine text='average' value={average} />
+              <StatisticsLine
+                text='positive'
+                value={`${positivePercentage}%`}
+              />
+            </tbody>
+          </table>
         </>
       )}
     </>
