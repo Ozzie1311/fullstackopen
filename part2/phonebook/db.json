@@ -1,24 +1,19 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
+      "id": "32c1",
+      "name": "Oswaldo Rodriguez",
+      "number": "0424-902-9676"
     },
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
+      "id": "be3e",
+      "name": "Nidia Moreno",
+      "number": "0424-112-2424"
     },
     {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
+      "id": "c54e",
+      "name": "Karolina Rodriguez",
+      "number": "0414-112-3345"
     }
   ]
 }
