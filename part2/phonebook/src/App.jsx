@@ -2,19 +2,21 @@ import Header from './Components/Header'
 import Form from './Components/Form'
 import Numbers from './Components/Numbers'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      name: 'Arto Hellas',
-      number: '0424-000-5555',
-      id: 1,
-    },
-  ])
-  const [newName, setNewName] = useState('Ada Lovelace')
-  const [newNumber, setNewNumber] = useState('0424-333-5558')
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  const hook = () => {
+    axios.get('http://localhost:3001/persons').then((response) => {
+      setPersons(response.data)
+    })
+  }
+  useEffect(hook, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
