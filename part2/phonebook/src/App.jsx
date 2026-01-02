@@ -4,12 +4,15 @@ import Numbers from './Components/Numbers'
 import phoneService from './Services/phonenumbers'
 
 import { useState, useEffect } from 'react'
+import Notification from './Components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationType, setNotificationType] = useState('success')
 
   const hook = () => {
     phoneService.getAll().then((initialPersons) => {
@@ -38,6 +41,24 @@ const App = () => {
                 person.id !== personToEdit.id ? person : returnedPerson
               )
             )
+            setErrorMessage(`Number of ${returnedPerson.name} updated`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch((error) => {
+            setNotificationType('error')
+            setErrorMessage(
+              `Information of ${edditedObject.name} has already been removed from server`
+            )
+            setPersons(
+              persons.filter((person) => person.id !== edditedObject.id)
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
             setNewName('')
             setNewNumber('')
           })
@@ -50,6 +71,11 @@ const App = () => {
 
       phoneService.create(newPersonObject).then((createdNote) => {
         setPersons([...persons, createdNote])
+        // setNotificationType('success')
+        setErrorMessage(`Added ${createdNote.name}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
         setNewName('')
         setNewNumber('')
       })
@@ -89,6 +115,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={errorMessage} type={notificationType} />
       <Header filter={filter} handleFilterChange={handleFilterChange} />
       <Form
         handleSubmit={handleSubmit}
