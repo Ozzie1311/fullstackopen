@@ -2,6 +2,16 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Country from './Country.jsx'
 
+const CountryArticle = ({ country }) => {
+  const [isShow, setIsShow] = useState(false)
+  return (
+    <li>
+      {isShow ? <Country country={country} /> : country.name.common}
+      <button onClick={() => setIsShow(!isShow)}>{isShow ? 'Hide' : 'Show'}</button>
+    </li>
+  )
+}
+
 const App = () => {
   const [allCountries, setAllCountries] = useState([])
   const [value, setValue] = useState('')
@@ -33,7 +43,7 @@ const App = () => {
       ) : (
         <ul>
           {countriesToShow.map((c) => (
-            <li key={c.name.common}>{c.name.common}</li>
+            <CountryArticle key={c.name.common} country={c} />
           ))}
         </ul>
       )}
