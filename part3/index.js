@@ -26,6 +26,24 @@ let phonebook = [
   },
 ]
 
+const generateRandomNumber = () => {
+  return Math.floor(Math.random() * 1000000)
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const newPerson = {
+    id: generateRandomNumber(),
+    name: body.name,
+    number: body.number,
+  }
+
+  phonebook = [...phonebook, newPerson]
+
+  response.json(newPerson)
+})
+
 app.get('/api/persons', (request, response) => {
   response.json(phonebook)
 })
