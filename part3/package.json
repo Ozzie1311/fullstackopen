@@ -11,8 +11,13 @@
   "author": "Oswaldo Rodriguez",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "cors": "^2.8.5",
     "express": "^5.2.1"
+=======
+    "express": "^5.2.1",
+    "morgan": "^1.10.1"
+>>>>>>> f8756fa337a1a1f32f90e3cfa01a4ac65e1f0637
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
