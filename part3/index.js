@@ -1,13 +1,14 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 app.use(express.urlencoded({ extended: true }))
-
 morgan.token('body', (req, res) => {
   return JSON.stringify(req.body)
 })
