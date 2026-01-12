@@ -5,9 +5,9 @@ if (process.argv.length < 3) {
   process.exit(1)
 }
 
-const password = process.argv[2]
+const pass = process.argv[2]
 
-const url = `mongodb+srv://fullstack-oswaldo:${password}@cluster0.wo2v9ry.mongodb.net/phonebook?appName=Cluster0`
+const url = `mongodb+srv://fullstack-oswaldo:${pass}@cluster0.wo2v9ry.mongodb.net/phonebook?appName=Cluster0`
 
 mongoose.set('strictQuery', false)
 

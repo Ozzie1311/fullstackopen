@@ -9,7 +9,6 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
-<<<<<<< HEAD
 app.use(express.urlencoded({ extended: true }))
 morgan.token('body', (req, res) => {
   return JSON.stringify(req.body)
@@ -18,8 +17,6 @@ morgan.token('body', (req, res) => {
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 )
-=======
->>>>>>> f6517c2aec7594a6c7786ae9b4855a5dcae9157d
 
 let phonebook = [
   {
