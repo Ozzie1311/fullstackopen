@@ -57,6 +57,16 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
+//Get single person
+app.get('/api/persons/:id', (req, res, next) => {
+  const id = req.params.id
+  Person.findById(id)
+    .then((findedPerson) => {
+      res.json(findedPerson)
+    })
+    .catch((error) => next(error))
+})
+
 //Delete single person
 app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id
