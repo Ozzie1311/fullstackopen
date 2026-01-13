@@ -1,21 +1,36 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const morgan = require('morgan')
 const Person = require('./models/number')
+
 const app = express()
 
+const requestLogger = (req, res, next) => {
+  console.log('Method', req.method)
+  console.log('Path', req.path)
+  console.log('Body', req.body)
+  console.log('---')
+  next()
+}
+
+const errorHandler = (error, req, res, next) => {
+  console.log(error.message)
+
+  if (error.message === 'CastError') {
+    return req.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+//-- Some middlewares -- //
 app.use(express.json())
+app.use(express.static('dist'))
 app.use(cors())
+app.use(requestLogger)
 
-morgan.token('body', (req, res) => {
-  return JSON.stringify(req.body)
-})
+// -- Routes -- //
 
-app.use(
-  morgan(':method :url :status :res[content-length] - :response-time ms :body')
-)
-
+// Create person
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
@@ -34,11 +49,29 @@ app.post('/api/persons', (req, res) => {
   })
 })
 
+//Get persons
 app.get('/api/persons', (req, res) => {
   Person.find({}).then((person) => {
     res.json(person)
   })
 })
+
+//Delete single person
+app.delete('/api/persons/:id', (req, res, next) => {
+  const id = req.params.id
+  Person.findByIdAndDelete(id)
+    .then((result) => {
+      return res.status(204).end()
+    })
+    .catch((error) => next(error))
+})
+
+const unknownEndpoint = (req, res, next) => {
+  return res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)
