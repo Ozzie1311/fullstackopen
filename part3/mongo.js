@@ -1,46 +1,46 @@
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 
-if (process.argv.length < 3) {
-  console.log('give password as argument')
-  process.exit(1)
-}
+// if (process.argv.length < 3) {
+//   console.log('give password as argument')
+//   process.exit(1)
+// }
 
-const pass = process.argv[2]
+// const pass = process.argv[2]
 
-const url = `mongodb+srv://fullstack-oswaldo:${pass}@cluster0.wo2v9ry.mongodb.net/phonebook?appName=Cluster0`
+// const url = process.env.MONGODB_URI
 
-mongoose.set('strictQuery', false)
+// mongoose.set('strictQuery', false)
 
-mongoose.connect(url)
+// mongoose.connect(url)
 
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-})
+// const personSchema = new mongoose.Schema({
+//   name: String,
+//   number: String,
+// })
 
-const Person = mongoose.model('Person', personSchema)
+// const Person = mongoose.model('Person', personSchema)
 
-if (process.argv.length === 3) {
-  console.log('Phonebook')
-  Person.find({}).then((result) => {
-    result.forEach(({ name, number }) => {
-      console.log(`${name} ${number}`)
-    })
-    mongoose.connection.close()
-  })
-}
+// if (process.argv.length === 3) {
+//   console.log('Phonebook')
+//   Person.find({}).then((result) => {
+//     result.forEach(({ name, number }) => {
+//       console.log(`${name} ${number}`)
+//     })
+//     mongoose.connection.close()
+//   })
+// }
 
-if (process.argv.length === 5) {
-  const name = process.argv[3]
-  const number = process.argv[4]
+// if (process.argv.length === 5) {
+//   const name = process.argv[3]
+//   const number = process.argv[4]
 
-  const newPerson = new Person({
-    name,
-    number,
-  })
+//   const newPerson = new Person({
+//     name,
+//     number,
+//   })
 
-  newPerson.save().then((result) => {
-    console.log(`Added ${name} number ${number} to phonebook`)
-    mongoose.connection.close()
-  })
-}
+//   newPerson.save().then((result) => {
+//     console.log(`Added ${name} number ${number} to phonebook`)
+//     mongoose.connection.close()
+//   })
+// }
