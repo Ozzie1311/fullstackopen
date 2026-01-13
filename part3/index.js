@@ -7,7 +7,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
-app.use(express.urlencoded({ extended: true }))
+
 morgan.token('body', (req, res) => {
   return JSON.stringify(req.body)
 })
@@ -19,8 +19,8 @@ app.use(
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
-  if (body.name === undefined || body.number === undefined) {
-    return res.status(404).json({ error: 'content missing' })
+  if (!body.name || !body.number) {
+    return res.status(400).json({ error: 'content missing' })
   }
 
   const newPerson = new Person({
@@ -33,6 +33,17 @@ app.post('/api/persons', (req, res) => {
     res.json(savedPerson)
   })
 })
+
+app.get('/api/persons', (req, res) => {
+  Person.find({}).then((person) => {
+    res.json(person)
+  })
+})
+
+const PORT = process.env.PORT
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)
+
 // app.post('/api/persons', (request, response) => {
 //   const body = request.body
 
@@ -91,13 +102,3 @@ app.post('/api/persons', (req, res) => {
 //   phonebook = phonebook.filter((p) => p.id !== id)
 //   response.status(204).end()
 // })
-
-app.get('/api/persons', (req, res) => {
-  Person.find({}).then((person) => {
-    res.json(person)
-  })
-})
-
-const PORT = process.env.PORT
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
