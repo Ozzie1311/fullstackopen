@@ -26,21 +26,13 @@ const App = () => {
     const personToEdit = persons.find((person) => person.name === newName)
 
     if (personToEdit) {
-      if (
-        confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one?`
-        )
-      ) {
+      if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         const edditedObject = { ...personToEdit, number: newNumber }
         phoneService
           .update(personToEdit.id, edditedObject)
           .then((returnedPerson) => {
             console.log('lo que devuelve la consola', returnedPerson)
-            setPersons(
-              persons.map((person) =>
-                person.id !== personToEdit.id ? person : returnedPerson
-              )
-            )
+            setPersons(persons.map((person) => (person.id !== personToEdit.id ? person : returnedPerson)))
             setErrorMessage(`Number of ${returnedPerson.name} updated`)
             setTimeout(() => {
               setErrorMessage(null)
@@ -50,12 +42,8 @@ const App = () => {
           })
           .catch((error) => {
             setNotificationType('error')
-            setErrorMessage(
-              `Information of ${edditedObject.name} has already been removed from server`
-            )
-            setPersons(
-              persons.filter((person) => person.id !== edditedObject.id)
-            )
+            setErrorMessage(`Information of ${edditedObject.name} has already been removed from server`)
+            setPersons(persons.filter((person) => person.id !== edditedObject.id))
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
@@ -69,16 +57,23 @@ const App = () => {
         number: newNumber,
       }
 
-      phoneService.create(newPersonObject).then((createdNote) => {
-        setPersons([...persons, createdNote])
-        // setNotificationType('success')
-        setErrorMessage(`Added ${createdNote.name}`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        setNewName('')
-        setNewNumber('')
-      })
+      phoneService
+        .create(newPersonObject)
+        .then((createdNote) => {
+          setPersons([...persons, createdNote])
+          setNotificationType('success')
+          setErrorMessage(`Added ${createdNote.name}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch((error) => {
+          console.log(error)
+          setNotificationType('error')
+          setErrorMessage(error.response.data.error)
+        })
     }
   }
 
@@ -107,11 +102,7 @@ const App = () => {
   }
 
   const personsToShow =
-    filter === ''
-      ? persons
-      : persons.filter((person) =>
-          person.name.toLowerCase().includes(filter.toLowerCase())
-        )
+    filter === '' ? persons : persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <div>

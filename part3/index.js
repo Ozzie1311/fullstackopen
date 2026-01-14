@@ -16,8 +16,10 @@ const requestLogger = (req, res, next) => {
 const errorHandler = (error, req, res, next) => {
   console.log(error.message)
 
-  if (error.message === 'CastError') {
-    return req.status(400).send({ error: 'malformatted id' })
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message })
   }
 
   next(error)
@@ -31,7 +33,7 @@ app.use(requestLogger)
 // -- Routes -- //
 
 // Create person
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
   console.log(req)
 
@@ -44,10 +46,13 @@ app.post('/api/persons', (req, res) => {
     number: body.number,
   })
 
-  newPerson.save().then((savedPerson) => {
-    console.log(savedPerson, 'added succesfully')
-    res.json(savedPerson)
-  })
+  newPerson
+    .save()
+    .then((savedPerson) => {
+      console.log(savedPerson, 'added succesfully')
+      res.json(savedPerson)
+    })
+    .catch((error) => next(error))
 })
 
 //Get persons
