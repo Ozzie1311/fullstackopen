@@ -92,7 +92,7 @@ app.put('/api/persons/:id', (req, res, next) => {
     number,
   }
 
-  Person.findByIdAndUpdate(id, newPerson, { new: true })
+  Person.findByIdAndUpdate(id, newPerson, { new: true, runValidators: true })
     .then((updatedPerson) => {
       res.json(updatedPerson)
     })
