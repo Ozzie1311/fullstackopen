@@ -4,7 +4,6 @@ const mongoose = require('mongoose')
 const app = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
-const { title } = require('node:process')
 
 const api = supertest(app)
 
@@ -73,6 +72,22 @@ test('a valid blog can be added', async () => {
     assert.strictEqual(response.body.length, initialBlogs.length + 1)
 
     assert(blogsTitles.includes(newBlog.title))
+})
+
+test('likes property is missing', async () => {
+    const newBlog = {
+        title: 'test title',
+        author: 'test author',
+        url: 'test url',
+    }
+
+    const result = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(result.body.likes, 0)
 })
 
 after(async () => {
