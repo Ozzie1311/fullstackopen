@@ -1,35 +1,21 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const app = require('../app')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
-
+const { initialBlogs, blogsInDB } = require('./test_helper')
 const api = supertest(app)
 
-const initialBlogs = [
-    {
-        title: 'Titulo1',
-        author: 'Author1',
-        url: 'url1',
-        likes: 1,
-        id: '69693b110e8628e7d01c9308',
-    },
-    {
-        title: 'Titulo2',
-        author: 'Author2',
-        url: 'url2',
-        likes: 2,
-        id: '69694799e7d002b6f35d6da5',
-    },
-]
+const endpoint = '/api/blogs'
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    for (let blog of initialBlogs) {
-        let newBlog = new Blog(blog)
-        await newBlog.save()
-    }
+    // for (let blog of initialBlogs) {
+    //     let newBlog = new Blog(blog)
+    //     await newBlog.save()
+    // }
+    await Blog.insertMany(initialBlogs)
 })
 
 test('blogs are returned as json', async () => {
@@ -97,6 +83,42 @@ test('fails with status code 400 if url or title is missing', async () => {
     }
 
     await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
+test('succeeds with status code 204 if id is valid', async () => {
+    const blogs = await blogsInDB()
+    const blogToDelete = blogs[0]
+
+    await api.delete(`${endpoint}/${blogToDelete.id}`).expect(204)
+
+    const blogsInEnd = await blogsInDB()
+
+    const titles = blogsInEnd.map((b) => b.title)
+    assert(!titles.includes(blogToDelete.title))
+    assert.strictEqual(blogsInEnd.length, initialBlogs.length - 1)
+})
+
+describe('update a unique blog', () => {
+    test('succeeds with status 200 if id is valid', async () => {
+        const blogsAtStart = await blogsInDB()
+        const blogToUpdate = blogsAtStart[0]
+
+        const newBlog = {
+            likes: blogToUpdate.likes + 1,
+        }
+
+        await api
+            .put(`${endpoint}/${blogToUpdate.id}`)
+            .send(newBlog)
+            .expect(200)
+
+        const blogsInEnd = await blogsInDB()
+        const updatedBlog = blogsInEnd.find(
+            (blog) => blog.id === blogToUpdate.id,
+        )
+
+        assert.strictEqual(updatedBlog.likes, newBlog.likes)
+    })
 })
 
 after(async () => {
