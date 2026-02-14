@@ -6,7 +6,7 @@ const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const { MONGODB_URI } = require('./utils/config')
 const usersRouter = require('./controller/users')
-
+const loginRouter = require('./controller/login')
 mongoose.set('strictQuery', false)
 
 logger.info('Connecting to', MONGODB_URI)
@@ -28,6 +28,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
