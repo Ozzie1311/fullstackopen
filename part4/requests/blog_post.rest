@@ -1,9 +1,9 @@
 post http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik9zd2FsZG8iLCJpZCI6IjY5OGY5ODk5YmIwMjNiYjdmZTVjZWJmOCIsImlhdCI6MTc3MTAzMTIzOCwiZXhwIjoxNzcxMDM0ODM4fQ.-dLYfAOA9hZqMN8Ru7A72D4ONvi8UBacWgXVVPJEoeM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik9zd2FsZG8iLCJpZCI6IjY5OGY5ODk5YmIwMjNiYjdmZTVjZWJmOCIsImlhdCI6MTc3MTAzNTgyMywiZXhwIjoxNzcxMDM5NDIzfQ.kU4pW9zVSdcL90z6TXprg30F0oUjgUokKAqtijSCg_8
 
 {
-    "title": "Estamos verificando la refactorización",
+    "title": "Ya estoy entendiendo esta guarandinga",
     "url": "www.verificación.com",
     "author": "Oswaldo Rodriguez",
     "likes": 10
