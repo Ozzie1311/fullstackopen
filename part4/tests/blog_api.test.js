@@ -1,21 +1,40 @@
 const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
+require('dotenv').config
 const mongoose = require('mongoose')
 const app = require('../app')
 const supertest = require('supertest')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const { initialBlogs, blogsInDB } = require('./test_helper')
 const api = supertest(app)
 
 const endpoint = '/api/blogs'
+let token = null
 
 beforeEach(async () => {
-    await Blog.deleteMany({})
-    // for (let blog of initialBlogs) {
-    //     let newBlog = new Blog(blog)
-    //     await newBlog.save()
-    // }
-    await Blog.insertMany(initialBlogs)
+    await Blog.deleteMany({}) //Borramos blogs de la base de datos
+    await User.deleteMany({}) //Borramos usuarios de la base de datos
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save() //Guardamos el usuario que acabamos de crear
+
+    const userForToken = {
+        //Generando el token
+        username: user.username,
+        id: user._id,
+    }
+    token = jwt.sign(userForToken, process.env.SECRET)
+
+    const blogs = initialBlogs.map((b) => {
+        return new Blog({ ...b, user: user._id })
+    })
+
+    const promiseArray = blogs.map((b) => b.save())
+    await Promise.all(promiseArray)
 })
 
 test('blogs are returned as json', async () => {
@@ -47,6 +66,7 @@ test('a valid blog can be added', async () => {
 
     await api
         .post('/api/blogs')
+        .set('Authorization', 'Bearer ' + token)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -69,6 +89,7 @@ test('likes property is missing', async () => {
 
     const result = await api
         .post('/api/blogs')
+        .set('Authorization', 'Bearer ' + token)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -82,14 +103,40 @@ test('fails with status code 400 if url or title is missing', async () => {
         url: 'url test',
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    await api
+        .post('/api/blogs')
+        .set('Authorization', 'Bearer ' + token)
+        .send(newBlog)
+        .expect(400)
+})
+
+test('adding a blog fails with status code 401 if token is not provided', async () => {
+    const blogsAtStart = await blogsInDB()
+
+    const newBlog = {
+        title: 'Blog without permission',
+        author: 'Hacker',
+        url: 'www.hacker.com',
+        likes: 0,
+    }
+
+    await api
+        .post(endpoint)
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+    const blogsAtEnd = await blogsInDB()
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
 })
 
 test('succeeds with status code 204 if id is valid', async () => {
     const blogs = await blogsInDB()
     const blogToDelete = blogs[0]
 
-    await api.delete(`${endpoint}/${blogToDelete.id}`).expect(204)
+    await api
+        .delete(`${endpoint}/${blogToDelete.id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .expect(204)
 
     const blogsInEnd = await blogsInDB()
 
