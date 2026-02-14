@@ -1,9 +1,9 @@
 post http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik9zd2FsZG8iLCJpZCI6IjY5OGY5ODk5YmIwMjNiYjdmZTVjZWJmOCIsImlhdCI6MTc3MTAyOTQ0Nn0.cpPGka25F_gusxK4BlFQXWzkbl8a-w_1n0uSLBKMIJA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik9zd2FsZG8iLCJpZCI6IjY5OGY5ODk5YmIwMjNiYjdmZTVjZWJmOCIsImlhdCI6MTc3MTAzMTIzOCwiZXhwIjoxNzcxMDM0ODM4fQ.-dLYfAOA9hZqMN8Ru7A72D4ONvi8UBacWgXVVPJEoeM
 
 {
-    "title": "Estamos verificando que todo este perfectamente bien",
+    "title": "Estamos verificando la refactorización",
     "url": "www.verificación.com",
     "author": "Oswaldo Rodriguez",
     "likes": 10
