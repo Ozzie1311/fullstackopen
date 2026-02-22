@@ -1,0 +1,22 @@
+{
+  "name": "testing-blogapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.0",
+    "eslint": "^10.0.1",
+    "globals": "^17.3.0"
+  }
+}

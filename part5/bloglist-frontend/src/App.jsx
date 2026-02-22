@@ -46,9 +46,7 @@ const App = () => {
     const handleBlogForm = (blogObject) => {
         blogService.create(blogObject).then((returnedBlog) => {
             setBlogs(blogs.concat(returnedBlog))
-            notificationMessage(
-                `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
-            )
+            notificationMessage(`a new blog  by ${returnedBlog.author} added`)
         })
     }
 

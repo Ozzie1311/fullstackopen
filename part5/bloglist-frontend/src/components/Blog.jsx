@@ -12,7 +12,7 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
         marginTop: 10,
     }
     return (
-        <div style={blogStyle}>
+        <div style={blogStyle} className="blog">
             <div>
                 <strong>Title: </strong> {blog.title}{' '}
                 <strong>{blog.author}</strong>
