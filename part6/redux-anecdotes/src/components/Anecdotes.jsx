@@ -1,8 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { addVote, setAnecdotes } from '../reducers/anecdoteReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import { useEffect } from 'react'
-import { getAnecdotes } from '../services/anecdote'
+import { initializeAnecdotes, updateVotes } from '../reducers/anecdoteReducer'
 
 const Anecdotes = () => {
   const anecdotesList = useSelector(({ anecdotes, filter }) => {
@@ -18,13 +17,11 @@ const Anecdotes = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    getAnecdotes().then((anecdotes) => {
-      dispatch(setAnecdotes(anecdotes))
-    })
+    dispatch(initializeAnecdotes())
   }, [dispatch])
 
   const vote = (anecdote) => {
-    dispatch(addVote(anecdote.id))
+    dispatch(updateVotes(anecdote))
     dispatch(showNotification(`You vote for ${anecdote.content}`, 3))
   }
 
